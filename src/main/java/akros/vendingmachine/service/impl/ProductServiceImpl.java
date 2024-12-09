@@ -27,6 +27,11 @@ import static org.springframework.http.HttpStatus.*;
  * Provides functionality for managing products in the vending machine application.
  * This includes creating, updating, retrieving, and deleting products.
  * Also manages the associated inventory for each product.
+ *
+ * @author  Saliou Conde
+ * @version 0.1.0
+ * @since   0.1.0
+ * @see ProductServiceImpl
  */
 @Service
 @AllArgsConstructor
