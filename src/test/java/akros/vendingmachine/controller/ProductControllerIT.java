@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.OK;
 
 class ProductControllerIT extends AbstractProductIT {
@@ -54,6 +55,33 @@ class ProductControllerIT extends AbstractProductIT {
         //Then
         assertThat(responseDto).isNotNull();
         assertThat(responseDto.getStatus()).isEqualTo(HttpStatus.CREATED);
+    }
+
+    @Test
+    void should_not_add_product_when_quantity_more_than_10_products_with_same_product_name() {
+        //Given
+        String AUTH_API_PATH = "/api/v1/products";
+        ProductDTO productDTO = ProductDTO.builder()
+                .productName("Cola")
+                .productPrice(350)
+                .build();
+
+        //When
+        addProduct(productDTO);
+        addProduct(productDTO);
+        addProduct(productDTO);
+        addProduct(productDTO);
+        addProduct(productDTO);
+        addProduct(productDTO);
+        addProduct(productDTO);
+        addProduct(productDTO);
+        addProduct(productDTO);
+        addProduct(productDTO);
+        ProductResponseDto responseDto = restTemplate.exchange(AUTH_API_PATH , POST, new HttpEntity<>(productDTO), ProductResponseDto.class).getBody();
+
+        //Then
+        assertThat(responseDto).isNotNull();
+        assertThat(responseDto.getStatus()).isEqualTo(BAD_REQUEST);
     }
 
     @Test

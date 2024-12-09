@@ -22,6 +22,12 @@ import static akros.vendingmachine.AppConstant.PRODUCT_API_PATH;
 import static akros.vendingmachine.AppConstant.PRODUCT_KEY;
 import static org.springframework.http.HttpStatus.*;
 
+/**
+ * Implementation of the {@link ProductService} interface.
+ * Provides functionality for managing products in the vending machine application.
+ * This includes creating, updating, retrieving, and deleting products.
+ * Also manages the associated inventory for each product.
+ */
 @Service
 @AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
@@ -30,12 +36,23 @@ public class ProductServiceImpl implements ProductService {
     private final InventarRepository inventarRepository;
     private static final ProductMapper PRODUCT_MAPPER = ProductMapper.PRODUCT_MAPPER;
 
+    /**
+     * Retrieves a list of all products.
+     *
+     * @return List of ProductDTO objects representing all products.
+     */
     @Override
     public List<ProductDTO> getProducts() {
         List<Product> products = productRepository.findAll();
         return products.stream().map(ProductMapper.PRODUCT_MAPPER::mapToProductDTO).toList();
     }
 
+    /**
+     * Retrieves a product by its ID.
+     *
+     * @param id The ID of the product to retrieve.
+     * @return ProductResponseDto containing product data and status information.
+     */
     @Override
     public ProductResponseDto getProduct(Integer id) {
         Product productById = findProductById(id);
@@ -54,6 +71,12 @@ public class ProductServiceImpl implements ProductService {
         return productNotFoundById(id);
     }
 
+    /**
+     * Creates a new product and adds it to the inventory.
+     *
+     * @param product The product data to be created.
+     * @return ProductResponseDto containing the created product and status information.
+     */
     @Override
     public ProductResponseDto createProduct(ProductDTO product) {
 
@@ -94,6 +117,12 @@ public class ProductServiceImpl implements ProductService {
                 .build();
     }
 
+    /**
+     * Deletes a product by its ID and updates the associated inventory.
+     *
+     * @param id The ID of the product to delete.
+     * @return ProductResponseDto containing product data and status information.
+     */
     @Override
     public ProductResponseDto deleteProduct(Integer id) {
         Product product = findProductById(id);
@@ -118,6 +147,13 @@ public class ProductServiceImpl implements ProductService {
         return productNotFoundById(id);
     }
 
+    /**
+     * Updates an existing product's details.
+     *
+     * @param productDTO The updated product data.
+     * @param id         The ID of the product to update.
+     * @return ProductResponseDto containing the updated product and status information.
+     */
     @Override
     public ProductResponseDto updateProduct(ProductDTO productDTO, Integer id) {
         Product findProductById = findProductById(id);
@@ -137,10 +173,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
+    /**
+     * Finds a product by its ID.
+     *
+     * @param id The ID of the product to find.
+     * @return Product object if found, or null if not found.
+     */
     private Product findProductById(Integer id) {
         return productRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Creates a ProductResponseDto indicating that the product was not found by ID.
+     *
+     * @param id The ID of the product that was not found.
+     * @return ProductResponseDto containing an error message and status.
+     */
     private ProductResponseDto productNotFoundById(Integer id) {
         return ProductResponseDto.builder()
                 .timestamp(Instant.now().toString())
