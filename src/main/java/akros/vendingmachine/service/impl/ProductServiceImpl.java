@@ -99,6 +99,7 @@ public class ProductServiceImpl implements ProductService {
             if(inventar.getQuantity() > 9) {
                 return ProductResponseDto.builder()
                         .timestamp(Instant.now().toString())
+                        .message("Inventar quantity shall not be more than than for a dedicated product")
                         .status(BAD_REQUEST)
                         .error("Product cannot be added")
                         .path(PRODUCT_API_PATH)
