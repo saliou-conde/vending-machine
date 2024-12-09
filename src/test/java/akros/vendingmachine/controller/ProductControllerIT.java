@@ -3,6 +3,7 @@ package akros.vendingmachine.controller;
 import akros.vendingmachine.AbstractProductIT;
 import akros.vendingmachine.dto.ProductDTO;
 import akros.vendingmachine.dto.ProductResponseDto;
+import akros.vendingmachine.repository.InventarRepository;
 import akros.vendingmachine.repository.ProductRepository;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterEach;
@@ -29,6 +30,8 @@ class ProductControllerIT extends AbstractProductIT {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private InventarRepository productInventarRepository;
 
     @BeforeEach
     void setUp() {
@@ -38,6 +41,7 @@ class ProductControllerIT extends AbstractProductIT {
     @AfterEach
     void tearDown() {
         productRepository.deleteAll();
+        productInventarRepository.deleteAll();
     }
 
     @Test
